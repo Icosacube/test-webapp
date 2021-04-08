@@ -21,6 +21,8 @@ app.engine('hbs', exphbs({
 app.use(express.static('public'))
 app.set('view engine', 'hbs')
 
+var {Snack} = require('./db.js')
+
 /*==========================ROUTING STARTS HERE==========================*/
 
 // get menu of snacks including pictures and prices
@@ -45,11 +47,15 @@ var gungun = {
 	]
 }
 
-app.get('/gun', function(req, res)
-{
-res.render('gun', gungun);
+app.get('/gun', function(req, res) {
+	res.render('gun', gungun);
 });
 
+app.get('/menu', async (req, res) => {
+	snacks = await Snack.find()
+	//console.log("Retrieved", snacks)
+	res.send(snacks)
+})
 
 // start the server listening
 app.listen(port, () => {
